@@ -18,6 +18,9 @@ let colorBtn2 = document.querySelector(".bg-color");
 
 
 
+
+
+
 let rows= 100;
 let col = 26;
 
