@@ -6,13 +6,40 @@ let boldBtn = document.querySelector(".bold");
 let italicBtn = document.querySelector(".italic");
 let underline  = document.querySelector(".underline");
 
+let fontSizeBtn = document.querySelector(".font-size");
+let fontFamilyBtn = document.querySelector(".font-family");
 
+let leftBtn = document.querySelector(".left");
+let rightBtn = document.querySelector(".right");
+let centerBtn = document.querySelector(".center");
+
+let colorBtn1 = document.querySelector(".color");
+let colorBtn2 = document.querySelector(".bg-color"); 
 
 
 
 let rows= 100;
 let col = 26;
 
+//creating the state for every cell 
+let sheetDb = [] ;
+
+for(let i=0;i<rows;i++){
+    let row = [];
+    for(let j=0;j<col;j++){
+        let cell = {
+            bold: "normal"
+            , italic: "normal",
+            underline: "none", hAlign: "center",
+            fontFamily: "sans-serif"
+            , fontSize: "16",
+            color: "black",
+            bColor: "none"
+        }
+        row.push(cell);
+    }
+   sheetDb.push(row);
+}
 //creating colums boxes 
 for(let i= 0;i<rows;i++){
     let colBox = document.createElement("div");
@@ -37,10 +64,8 @@ for(let i=0;i<rows;i++){
         let cell = document.createElement("div");
         cell.setAttribute("class","cell");
         // cell.innerText=`${String.fromCharCode(65+j)} ${i+1}`;
-        //do remember ki maine  rid and cid  2d ke i=0 and j0 ke 
-        //according kiya hai
-        // j dikkat nhi dega  woh 0 se A and  and usi 2d index
-        //me chalega row i problem karenge toh + 1 kar denge 
+        // humne rid cid actually me 0,0 format se set kare hai dikhaye 1 ,A  vali form me hai 
+        //meaning ki row +1 karke dikhayi hai colum simple 65+ 0 karke check line 68 of code.
          
         cell.setAttribute("rid",i);
         cell.setAttribute("cid",j);
@@ -68,7 +93,62 @@ for(let i=0;i<allCells.length;i++){
         cid = Number(cid);
 
         let address = `${String.fromCharCode(65 + cid)}${rid+1}`;
-        addressInput.value = address;        
+        addressInput.value = address;
+        //yahan par check lagayenge ki hum agar doosre pe 
+        // cell pe jaa rahe hai toh woh bhi bold na ho jaaye apne 
+        // aap   
+
+        let cellObject = sheetDb[rid][cid] ;
+        //check for bold 
+        if(cellObject.bold == "normal"){
+            boldBtn.classList.remove("active-btn");
+        }
+        else{
+            boldBtn.classList.add("active-btn");
+        }     
+        
+        //check for italic
+        if(cellObject.italic == "normal"){
+            italicBtn.classList.remove("active-btn");
+        }
+        else{
+            italicBtn.classList.add("active-btn");
+        } 
+        
+        if(cellObject.underline == "none"){
+            underline.classList.remove("active-btn");
+        }
+        else{
+            underline.classList.add("active-btn");
+        } 
+
+        //changing toolbaar for sleected property
+        if(cellObject.fontSize !== "16"){
+            let fontSize = parseInt(cellObject.fontSize);
+            let selectedTag = document.querySelector(".font-size");
+            for(let i=0;i<selectedTag.options.length;i++){
+                let option = selectedTag.options[i] ;
+
+                if(option.value == fontSize){
+                    selectedTag.selectedIndex = i ;
+                }
+            }
+            // selectedTag.selectedIndex = -1;
+            // let selectedTag = document.querySelector(".font-size");
+            // let opt = selectedTag.options[selectedTag.selectedIndex];
+            // let option = document.querySelector(`option[value="${opt.value}"]`);
+            // option.removeAttribute('selected');
+            // let option1 = document.querySelector(`option[value="${cellObject.fontSize}"]`);
+            // option1.setAttribute("selected","");
+        }
+        else{
+            let selectedTag = document.querySelector(".font-size");
+            selectedTag.selectedIndex = 1;
+        //     let selectedTag = document.querySelector(".font-size");
+        //     let option1 = document.querySelector(`option[value="16"]`);
+        //     option1.setAttribute("selected","true");
+        }
+
 
     })
 }
@@ -78,21 +158,114 @@ allCells[0].click();
 //applying bold functionality 
 boldBtn.addEventListener("click",function(){
   let uiCellElement = findUiCellElement();
-  uiCellElement.style.fontWeight = "bold";
-});
+  let rid = uiCellElement.getAttribute("rid");
+  let cid = uiCellElement.getAttribute("cid");
+  let cellObject = sheetDb[rid][cid];
 
+  if(cellObject.bold == "normal"){
+    uiCellElement.style.fontWeight = "bold";
+    boldBtn.classList.add("active-btn");
+    cellObject.bold="bold";
+  }
+  else{
+    uiCellElement.style.fontWeight = "normal";
+    boldBtn.classList.remove("active-btn");
+    cellObject.bold="normal";
+  }
+  
+});
+//applying italic functionality 
 italicBtn.addEventListener("click",function(){
     let uiCellElement = findUiCellElement();
+    let rid = uiCellElement.getAttribute("rid");
+    let cid = uiCellElement.getAttribute("cid");
+    let cellObject = sheetDb[rid][cid];
+
+  if(cellObject.italic == "normal"){
     uiCellElement.style.fontStyle = "italic";
+    italicBtn.classList.add("active-btn");
+    cellObject.italic ="italic";
+  }
+  else{
+    uiCellElement.style.fontStyle = "normal";
+    italicBtn.classList.remove("active-btn");
+    cellObject.italic ="normal";
+  }
 
 })
+
+//applying the underline functionality
 underline.addEventListener("click",function(){
     let uiCellElement = findUiCellElement();
+    let rid = uiCellElement.getAttribute("rid");
+    let cid = uiCellElement.getAttribute("cid");
+    let cellObject = sheetDb[rid][cid];
+
+  if(cellObject.underline == "none"){
+    underline.classList.add("active-btn");
+    cellObject.underline ="underline";
     uiCellElement.style.textDecoration = "underline";
+  }
+  else{
+    underline.classList.remove("active-btn");
+    cellObject.underline ="none";
+    uiCellElement.style.textDecoration = "none";
+  }
+
 })
 
 
- 
+fontSizeBtn.addEventListener("change",function(){
+   
+  let value = fontSizeBtn.value;  
+  let uiCellElement = findUiCellElement();
+  let rid = uiCellElement.getAttribute("rid");
+  let cid = uiCellElement.getAttribute("cid");
+  let cellObject = sheetDb[rid][cid];
+
+  uiCellElement.style.fontSize = value+"px";
+  cellObject.fontSize = value;
+
+
+
+});
+
+fontFamilyBtn.addEventListener("change",function(){
+    let value = fontFamilyBtn.value;
+    console.log(value);
+    let uiCellElement = findUiCellElement();
+    uiCellElement.style.fontFamily = value ;
+})
+
+//alignment buttons
+leftBtn.addEventListener("click",function(){
+    let uiCellElement =findUiCellElement();
+    uiCellElement.style.textAlign = "left";
+
+})
+
+rightBtn.addEventListener("click",function(){
+    let uiCellElement = findUiCellElement();
+    uiCellElement.style.textAlign = "right";
+})
+
+centerBtn.addEventListener("click",function(){
+    let uiCellElement = findUiCellElement();
+    uiCellElement.style.textAlign = "center";
+})
+
+
+//changing color of the text 
+colorBtn1.addEventListener("change",function(e){
+    let uiCellElement = findUiCellElement();
+    uiCellElement.style.color = e.target.value;
+})
+
+colorBtn2.addEventListener("change",function(e){
+    let uiCellElement = findUiCellElement();
+    uiCellElement.style.backgroundColor = e.target.value;
+})
+
 function findUiCellElement(){
     
   let address = addressInput.value;

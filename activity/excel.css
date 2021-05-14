@@ -154,3 +154,9 @@
   width:10%;   
 }
 
+
+/* active button class */
+.active-btn {
+    background-color: darkslategray;
+    
+}

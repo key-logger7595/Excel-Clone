@@ -11,24 +11,31 @@
     <div>
         <div class="menu-container">
             <select class="font-size">
-              <option value="8">8</option>
-              <option value="10">10</option>
               <option value="12">12</option>
-              <option value="14">14</option>
+              <option value="16" selected>16</option>
+              <option value="20">20</option>
+              <option value="32">32</option>
             </select>
             <select class="font-family">
-               <option value="monospace">monospace</option>
-               <option value="sans-seriff">sans-seriff</option>
-               <option value="Georgia">Georgia</option>
+               <option value="Times New Roman" selected>Times New Roman</option>
                <option value="fantasy">fantasy</option>
+               <option value="Arial">Arial</option>
+               <option value="cursive">cursive</option>
             </select>
             <div class="bui-container">
                 <input type="button" class="bold" value="B">
                 <input type="button" class="underline" value="U">
                 <input type="button" class="italic" value="I">
             </div>
-            <div class="align-container"></div>
-            <div class="color-container"></div>
+            <div class="align-container">
+                <input type="button" class="left" value="L">
+                <input type="button" class="center" value="C">
+                <input type="button" class="right" value="R">
+            </div>
+            <div class="color-container">
+                <input type="color" class="color">
+                <input type="color" class="bg-color">
+            </div>
 
         </div>
         <div class="formula-container">
