@@ -31,7 +31,7 @@ for(let i=0;i<rows;i++){
             bold: "normal"
             , italic: "normal",
             underline: "none", hAlign: "center",
-            fontFamily: "sans-serif"
+            fontFamily: "Times New Roman"
             , fontSize: "16",
             color: "black",
             bColor: "none"
@@ -133,22 +133,30 @@ for(let i=0;i<allCells.length;i++){
                     selectedTag.selectedIndex = i ;
                 }
             }
-            // selectedTag.selectedIndex = -1;
-            // let selectedTag = document.querySelector(".font-size");
-            // let opt = selectedTag.options[selectedTag.selectedIndex];
-            // let option = document.querySelector(`option[value="${opt.value}"]`);
-            // option.removeAttribute('selected');
-            // let option1 = document.querySelector(`option[value="${cellObject.fontSize}"]`);
-            // option1.setAttribute("selected","");
+
         }
         else{
             let selectedTag = document.querySelector(".font-size");
             selectedTag.selectedIndex = 1;
-        //     let selectedTag = document.querySelector(".font-size");
-        //     let option1 = document.querySelector(`option[value="16"]`);
-        //     option1.setAttribute("selected","true");
         }
 
+        //putting a  check for font-family
+        if(cellObject.fontFamily == "Times New Roman"){
+            let selectedTag = document.querySelector(".font-family");
+            selectedTag.selectedIndex = 0;
+        }
+        else{
+            let fontFamily = cellObject.fontFamily ;
+            let selectedTag = document.querySelector(".font-family");
+            for(let i=0;i<selectedTag.options.length;i++){
+                let option = selectedTag.options[i] ;
+
+                if(option.value == fontFamily){
+                    selectedTag.selectedIndex = i ;
+                }
+            }
+
+        }
 
     })
 }
@@ -232,9 +240,14 @@ fontSizeBtn.addEventListener("change",function(){
 
 fontFamilyBtn.addEventListener("change",function(){
     let value = fontFamilyBtn.value;
-    console.log(value);
     let uiCellElement = findUiCellElement();
+    let rid = uiCellElement.getAttribute("rid");
+    let cid = uiCellElement.getAttribute("cid");
+    let cellObject = sheetDb[rid][cid];
+    
+
     uiCellElement.style.fontFamily = value ;
+    cellObject.fontFamily = value;
 })
 
 //alignment buttons

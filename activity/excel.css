@@ -160,3 +160,11 @@
     background-color: darkslategray;
     
 }
+.nos-container {
+  display: flex;
+}
+.nos-container>*{
+    border:none;
+    height:100%
+}
+
