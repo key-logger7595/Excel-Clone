@@ -17,7 +17,7 @@ let colorBtn1 = document.querySelector(".color");
 let colorBtn2 = document.querySelector(".bg-color"); 
 
 
-
+let formulaBar = document.querySelector(".formula-input");
 
 
 
@@ -37,7 +37,9 @@ for(let i=0;i<rows;i++){
             fontFamily: "Times New Roman"
             , fontSize: "16",
             color: "black",
-            bColor: "none"
+            bColor: "none",
+            value:"",
+            formula:"",
         }
         row.push(cell);
     }
