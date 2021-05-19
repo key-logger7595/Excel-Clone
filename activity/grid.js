@@ -40,6 +40,7 @@ for(let i=0;i<rows;i++){
             bColor: "none",
             value:"",
             formula:"",
+            children:[]
         }
         row.push(cell);
     }
@@ -161,6 +162,17 @@ for(let i=0;i<allCells.length;i++){
                 }
             }
 
+        }
+
+        //yeh case 3 of formula implemntation ka check hai 
+        //jo ki yeh check karta hai bass ki agar cell pe formula ;aga hua hai toh usme '
+        //formula display kar deta hai
+        
+        if(cellObject.formula){
+            formulaBar.value = cellObject.formula;
+        }
+        else{
+            formulaBar.value = "";
         }
 
     })
