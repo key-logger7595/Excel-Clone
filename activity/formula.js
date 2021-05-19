@@ -38,12 +38,27 @@ for(let i=0;i<allCells.length;i++){
 
 
 //writing code for fromula remove 
+function removeFormula(cellObject,myName){
+    let formula = cellObject.formula;
+    let formulaToken = formula.split(" ");
+
+    for(let i=0;i<formulaToken.length;i++){
+        let ascii = formulaToken[i].charCodeAt(0);
+        if(ascii>=65 && ascii<=90){
+            let {rid,cid} = getRIDCIDObject(formulaToken[i]);
+            let parentObj = sheetDb[rid][cid];
+            let idx = parentObj.children.indexOf(myName);
+            parentObj.children.splice(idx,1);
+        }
+    }
+    cellObject.formula = "";
+}
 
 
 formulaBar.addEventListener("keydown",function(e){
     if(e.key == "Enter" && formulaBar.value){
        //get formula from formula bar
-      let currentFormula = formulaBar.value;
+    let currentFormula = formulaBar.value;
         console.log(currentFormula);
        //address of the cell jispe formula execute karna hai 
        //toh formula bar pe click karne se pehle ui pe 
@@ -82,21 +97,6 @@ formulaBar.addEventListener("keydown",function(e){
 
     }
 })
-function removeFormula(cellObject,myName){
-    let formula = cellObject.formula;
-    let formulaToken = formula.split(" ");
-
-    for(let i=0;i<formulaToken.length;i++){
-        let ascii = formulaToken[i].charCodeAt(0);
-        if(ascii>=65 && ascii<=90){
-            let {rid,cid} = getRIDCIDObject(formulaToken[i]);
-            let parentObj = sheetDb[rid][cid];
-            let idx = parentObj.children.indexOf(myName);
-            parentObj.children.splice(idx,1);
-        }
-    }
-    cellObject.formula = "";
-}
 
 function evaluateFormula(cformula) {
     // ( A1 + A2 )
