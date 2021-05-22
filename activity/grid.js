@@ -24,27 +24,120 @@ let formulaBar = document.querySelector(".formula-input");
 let rows= 100;
 let col = 26;
 
+let btnContainer = document.querySelector(".add-sheet_btn-container");
+let sheetList = document.querySelector(".sheet-list");
+let firstSheet = document.querySelector(".sheet");
+
+firstSheet.addEventListener("click",makeMeActive);
+firstSheet.click();
+btnContainer.addEventListener('click',function(){
+   
+    // get all the sheets first as we want to get the last sheet 
+   // and its index so that we can use it in getting idx attribute 
+let allSheets = document.querySelectorAll(".sheet");
+let lastSheet = allSheets[allSheets.length-1];
+
+let lastIdx = lastSheet.getAttribute("idx");
+
+lastIdx = Number(lastIdx);
+
+//creating a div which will represent newSheet 
+let newSheet = document.createElement("div");
+newSheet.setAttribute("class",'sheet');
+newSheet.setAttribute("idx",`${lastIdx+1}`);
+newSheet.innerText = `Sheet${lastIdx+2}`;
+
+sheetList.appendChild(newSheet);
+
+//removing active class on all before adding it to current one
+//why we remove so that when we are doing this for suppose 4th sheet
+//then  we have to make other 3 non-active to achieve active on 4th one
+for(let i=0;i<allSheets.length;i++){
+    allSheets[i].classList.remove('active');
+}
+
+newSheet.classList.add('active');
+
+//new sheet create meaning creating Db for the sheet
+createSheet();
+
+sheetDb = sheetArr[lastIdx+1];
+
+//now applying event listener on newSheet to achieve behaviour 
+//
+newSheet.addEventListener("click",makeMeActive);
+
+
+});
+
+
+function makeMeActive(e) {
+    // evnt listener  add 
+    let sheet = e.currentTarget;
+    let AllSheets = document.querySelectorAll(".sheet");
+    for (let i = 0; i < AllSheets.length; i++) {
+        AllSheets[i].classList.remove("active");
+    }
+    sheet.classList.add("active");
+    let idx = sheet.getAttribute("idx");
+    //the time when first sheet is created
+    if(!sheetArr[idx]){
+       createSheet();
+    }
+
+    //pointing to the current Db now 
+    sheetDb =sheetArr[idx];
+    //finally setting the UI i.e filling the values 
+    //but its effect will be shown when we will switch from one sheet to another 
+    setUi();
+}
+
+
+//creating the sheetArray to store DB for every sheet created 
+let sheetArr =[]
+
 //creating the state for every cell 
+// pointing to currentDb
 let sheetDb = [] ;
 
-for(let i=0;i<rows;i++){
-    let row = [];
-    for(let j=0;j<col;j++){
-        let cell = {
-            bold: "normal"
-            , italic: "normal",
-            underline: "none", hAlign: "center",
-            fontFamily: "Times New Roman"
-            , fontSize: "16",
-            color: "black",
-            bColor: "none",
-            value:"",
-            formula:"",
-            children:[]
+
+//copying code of creating sheet logic here 
+
+//this function create the db of the excel sheet i.e created object for every cell of the sheet to store its info .
+function createSheet(){
+    let newDb =[] ;
+    for(let i=0;i<rows;i++){
+        let row = [];
+        for(let j=0;j<col;j++){
+            let cell = {
+                bold: "normal"
+                , italic: "normal",
+                underline: "none", hAlign: "center",
+                fontFamily: "Times New Roman"
+                , fontSize: "16",
+                color: "black",
+                bColor: "none",
+                value:"",
+                formula:"",
+                children:[]
+            }
+            let element = document.querySelector(`.grid .cell[rid="${i}"][cid="${j}"]`);
+            element.innerText = "";
+
+            row.push(cell);
         }
-        row.push(cell);
+       newDb.push(row);
     }
-   sheetDb.push(row);
+    sheetArr.push(newDb);
+}
+//function to setUi i.e fill UI woth its previous value when clicked on that sheet
+function setUi(){
+    for(let i=0;i<rows;i++){
+        for(let j=0;j<col;j++){
+            let elem =document.querySelector(`.grid .cell[rid='${i}'][cid='${j}']`);
+            elem.innerText = sheetDb[i][j].value;
+        }
+    }
 }
 //creating colums boxes 
 for(let i= 0;i<rows;i++){
